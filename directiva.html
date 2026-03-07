@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directivo de Alabanza</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: Montserrat;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .logo {
+            margin-top: 25px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .container {
+            background: #1c2b33;
+            width: 90%;
+            max-width: 900px;
+            margin-top: 20px;
+            border-radius: 14px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 0;
+        }
+
+        .selector {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .selector button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            background: #00c9a7;
+            color: black;
+            transition: background 0.3s;
+        }
+
+        .selector button:hover {
+            background: #00b89e;
+        }
+
+        .filter {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .filter input {
+            width: 80%;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        .tables-container {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid #2f4b57;
+            text-align: center;
+        }
+
+        th {
+            background: #2c5364;
+        }
+
+        td {
+            background: #314e59;
+        }
+
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            opacity: 0.85;
+        }
+
+        .semana {
+            margin-top: 30px;
+        }
+
+        .semana h3 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="logo.jpg" class="logo">
+
+    <div class="container">
+        <h2>DISPONIBILIDADES REGISTRADAS</h2>
+
+        <!-- Selector de voces o músicos -->
+        <div class="selector">
+            <button onclick="cargarDatos('voces')">Ver Voces</button>
+            <button onclick="cargarDatos('musicos')">Ver Músicos</button>
+        </div>
+
+        <!-- Filtro por nombre -->
+        <div class="filter" style="display:none;">
+            <input type="text" id="filtroNombre" placeholder="Filtrar por nombre..." oninput="filtrarPorNombre()">
+        </div>
+
+        <!-- Contenedor de las tablas -->
+        <div class="tables-container" id="tablesContainer">
+            <!-- Aquí se generarán las tablas dinámicamente -->
+        </div>
+    </div>
+
+    <footer>
+        Panel de consulta para el Directivo de Alabanza
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAt8MkqaV_sZimt2HVhTc8OKz8gKmoTRnE",
+            authDomain: "programador-banda.firebaseapp.com",
+            projectId: "programador-banda",
+            storageBucket: "programador-banda.firebasestorage.app",
+            messagingSenderId: "115612679276",
+            appId: "1:115612679276:web:7bb4c3897226134909ec49"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Estructura base de datos
+        let semanas = [
+            {
+                id: 1,
+                descripcion: "Semana del 2 al 5 de abril",
+                fechas: [
+                    "Jueves 2 de abril",
+                    "Sábado 4 de abril",
+                    "Domingo 5 de abril (8:30AM)",
+                    "Domingo 5 de abril (10:30AM)",
+                    ""
+                ]
+            },
+            {
+                id: 2,
+                descripcion: "Semana del 7 al 12 de abril",
+                fechas: [
+                    "Martes 7 de abril",
+                    "Jueves 9 de abril",
+                    "Sábado 11 de abril",
+                    "Domingo 12 de abril (8:30AM)",
+                    "Domingo 12 de abril (10:30AM)"
+                ]
+            },
+            // Agrega las siguientes semanas aquí...
+            {
+                id: 3,
+                descripcion: "Semana del 14 al 19 de abril",
+                fechas: [
+                    "Martes 14 de abril",
+                    "Jueves 16 de abril",
+                    "Sábado 18 de abril",
+                    "Domingo 19 de abril (8:30AM)",
+                    "Domingo 19 de abril (10:30AM)"
+                ]
+            },
+            {
+                id: 4,
+                descripcion: "Semana del 21 al 26 de abril",
+                fechas: [
+                    "Martes 21 de abril",
+                    "Jueves 23 de abril",
+                    "Sábado 25 de abril",
+                    "Domingo 26 de abril (8:30AM)",
+                    "Domingo 26 de abril (10:30AM)"
+                ]
+            },
+            {
+                id: 5,
+                descripcion: "Semana del 28 al 30 de abril",
+                fechas: [
+                    "Martes 28 de abril",
+                    "Jueves 30 de abril",
+                ]
+            }
+        ];
+
+        let tipoSeleccionado = "";
+
+        function cargarDatos(tipo) {
+            tipoSeleccionado = tipo;
+            document.querySelector('.filter').style.display = "block";
+            const container = document.getElementById('tablesContainer');
+            container.innerHTML = ''; // Limpiar tablas previas
+
+            // Escuchar cambios en tiempo real
+            onSnapshot(collection(db, "disponibilidades"), (snapshot) => {
+                // Primero, organizamos la estructura por semanas y roles
+                let reservasPorSemana = {};
+
+                snapshot.forEach(doc => {
+                    console.log(doc.data())
+                    const data = doc.data()
+
+                    if (data.tipo && data.tipo.toLowerCase() === tipo.toLowerCase())
+                        data.disponibilidad.forEach(item => {
+                            let semana = item.semana;
+                            if (!reservasPorSemana[semana]) {
+                                reservasPorSemana[semana] = [];
+                            }
+                            reservasPorSemana[semana].push({
+                                nombre: data.nombre,
+                                rol: item.rol,
+                                dia: item.dia
+                            });
+                        });
+                });
+
+                // Generamos las tablas por semana
+            for (let semanaId in reservasPorSemana) {
+                let semana = semanas.find(s => s.descripcion === semanaId);
+                if (semana) {
+                    // Creamos una sección para esa semana
+                    const semanaDiv = document.createElement('div');
+                    semanaDiv.classList.add('semana');
+                    let h3 = document.createElement('h3');
+                    h3.textContent = semana.descripcion;
+                    semanaDiv.appendChild(h3);
+
+                    // Creamos una tabla
+                    let table = document.createElement('table');
+                    let thead = document.createElement('thead');
+                    let headerRow = document.createElement('tr');
+
+                    // Primera columna de roles
+                    let thRol = document.createElement('th');
+                    thRol.textContent = "Rol";
+                    headerRow.appendChild(thRol);
+
+                    // Columnas de días
+                    semana.fechas.forEach(fecha => {
+                        let th = document.createElement('th');
+                        th.textContent = fecha;
+                        headerRow.appendChild(th);
+                    });
+
+                    thead.appendChild(headerRow);
+                    table.appendChild(thead);
+
+                    // Creamos filas para cada rol (según tipo)
+                    let listaRoles = (tipoSeleccionado === "voces") ? ["Voz líder", "Voz apoyo", "Contralto", "Cuarta voz"] :
+                        ["Pianista", "Guitarrista", "Bajista", "Baterista"];
+
+                    let tbody = document.createElement('tbody');
+
+                    listaRoles.forEach(rol => {
+                        let fila = document.createElement('tr');
+                        let rolTd = document.createElement('td');
+                        rolTd.textContent = rol;
+                        rolTd.classList.add("role");
+                        fila.appendChild(rolTd);
+
+                        // Columnas de días
+                        semana.fechas.forEach(fecha => {
+                            let td = document.createElement('td');
+                            // Buscamos si hay una reserva de ese rol y día
+                            let reserva = reservasPorSemana[semana.descripcion].find(reserva => reserva.rol === rol && reserva.dia === fecha);
+                            if (reserva) {
+                                td.textContent = reserva.nombre;
+                                td.style.background = "#ff6b6b";
+                            } else {
+                                td.textContent = "";
+                                td.style.background = "#314e59";
+                            }
+                            fila.appendChild(td);
+                        });
+
+                        tbody.appendChild(fila);
+                    });
+
+                    table.appendChild(tbody);
+                    semanaDiv.appendChild(table);
+                    container.appendChild(semanaDiv);
+                }
+                }
+            });
+        }
+
+        function filtrarPorNombre() {
+            const input = document.getElementById("filtroNombre");
+            const filtro = input.value.toLowerCase();
+            const tablas = document.querySelectorAll('.tables-container .semana');
+            tablas.forEach(tablaSemana => {
+                const filas = tablaSemana.querySelectorAll('tbody tr');
+                filas.forEach(fila => {
+                    const celdas = fila.querySelectorAll('td');
+                    // Revisamos si algún nombre coincide
+                    let nombreEncontrado = false;
+                    celdas.forEach((celda, index) => {
+                        if (index > 0 && celda.textContent.toLowerCase().includes(filtro)) {
+                            nombreEncontrado = true;
+                        }
+                    });
+                    if (nombreEncontrado || filtro === "") {
+                        fila.style.display = "";
+                    } else {
+                        fila.style.display = "none";
+                    }
+                });
+            });
+        }
+
+        // Exponer funciones al scope global para los onclick
+        window.cargarDatos = cargarDatos;
+        window.filtrarPorNombre = filtrarPorNombre;
+
+    </script>
+
+</body>
+
+</html>
