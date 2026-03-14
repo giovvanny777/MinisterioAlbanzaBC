@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <title>MINISTERIO DE ALABANZA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            font-family: Montserrat, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+        }
+
+        .btn-home {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: #2c3e50;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background 0.3s;
+            z-index: 10;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-home:active {
+            background: #1abc9c;
+        }
+
+        .logo {
+            margin-top: 72px;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .container {
+            background: #1c2b33;
+            width: calc(100% - 20px);
+            max-width: 500px;
+            margin-top: 14px;
+            margin-bottom: 32px;
+            border-radius: 16px;
+            padding: 20px 14px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 0;
+            font-size: 17px;
+            letter-spacing: 0.5px;
+        }
+
+        h3#tituloSemana {
+            text-align: center;
+            font-size: 14px;
+            color: #cde8f0;
+            margin-top: 18px;
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+
+        input#nombre,
+        input#telefono {
+            width: 100%;
+            padding: 14px 12px;
+            border-radius: 10px;
+            border: none;
+            font-family: Montserrat, sans-serif;
+            font-size: 16px;
+            text-align: center;
+            margin-top: 8px;
+            margin-bottom: 4px;
+            background: #f0f0f0;
+            color: #111;
+            outline: none;
+        }
+
+        button {
+            padding: 13px 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: Montserrat, sans-serif;
+            font-size: 14px;
+            margin-top: 8px;
+            min-height: 48px;
+            transition: background 0.2s;
+        }
+
+        .btn-main {
+            background: #00c9a7;
+            color: black;
+            width: 100%;
+        }
+
+        .btn-main:active {
+            background: #00a88c;
+        }
+
+        .selector {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .selector button {
+            flex: 1;
+            background: #ffc75f;
+            color: #111;
+        }
+
+        .selector button:active {
+            background: #e6ae45;
+        }
+
+        /* ── Toggle switch ── */
+        .switch-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 14px;
+        }
+
+        .switch-track {
+            position: relative;
+            width: 260px;
+            height: 48px;
+            background: #243942;
+            border-radius: 30px;
+            cursor: pointer;
+            border: 2px solid #2f4b57;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .switch-thumb {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 122px;
+            height: 36px;
+            background: #ffc75f;
+            border-radius: 24px;
+            transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+            z-index: 1;
+        }
+
+        .switch-thumb.musico {
+            transform: translateX(122px);
+            background: #00c9a7;
+        }
+
+        .switch-label {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 13px;
+            font-weight: 600;
+            z-index: 2;
+            transition: color 0.3s;
+            pointer-events: none;
+        }
+
+        .switch-label.left {
+            left: 18px;
+            color: #111;
+        }
+
+        .switch-label.right {
+            right: 14px;
+            color: #7a9aa8;
+        }
+
+        .switch-label.left.inactivo { color: #7a9aa8; }
+        .switch-label.right.activo  { color: #111; }
+
+        .rol-badge {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #00c9a7;
+            min-height: 20px;
+            letter-spacing: 0.3px;
+        }
+
+        .instructivo {
+            background: #243942;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-top: 12px;
+            line-height: 1.5;
+        }
+
+        /* ── Wrapper scroll tabla ── */
+        .tabla-scroll {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 8px;
+            margin-top: 12px;
+            display: block;
+            background:
+                linear-gradient(to right, #1c2b33 20%, transparent),
+                linear-gradient(to left, #1c2b33 20%, transparent) 100% 0,
+                radial-gradient(farthest-side at 0 50%, rgba(0, 0, 0, .25), transparent),
+                radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, .25), transparent) 100% 0;
+            background-repeat: no-repeat;
+            background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+            background-attachment: local, local, scroll, scroll;
+        }
+
+        /* ── Tabla ── */
+        table {
+            width: max-content;
+            min-width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            margin-top: 0;
+        }
+
+        th,
+        td {
+            padding: 10px 8px;
+            border: 1px solid #2f4b57;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        th {
+            background: #2c5364;
+            font-size: 11px;
+            line-height: 1.3;
+        }
+
+        /* Columna Rol fija */
+        th:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 3;
+            background: #2c5364;
+        }
+
+        td.role {
+            position: sticky;
+            left: 0;
+            z-index: 2;
+            background: #263f4a;
+            font-weight: 600;
+            text-align: left;
+            padding-left: 10px;
+            min-width: 95px;
+            border-right: 2px solid #00c9a7;
+        }
+
+        /* ── Estados de celdas ── */
+        .slot {
+            cursor: pointer;
+            background: #314e59;
+            transition: background 0.15s;
+        }
+
+        .slot:active {
+            background: #3d6a79;
+        }
+
+        /* Seleccionado por el usuario actual */
+        .selected {
+            background: #00c9a7 !important;
+            color: black;
+            font-weight: 600;
+        }
+
+        /* ── Nav semanas ── */
+        .navSemanas {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .navSemanas button {
+            flex: 1;
+            background: #2c3e50;
+            color: white;
+            font-size: 13px;
+        }
+
+        .navSemanas button:active {
+            background: #1a252f;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        @media (min-width: 480px) {
+            .logo {
+                width: 110px;
+                height: 110px;
+            }
+
+            h2 {
+                font-size: 19px;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            th {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="index.html" class="btn-home">🏠 Inicio</a>
+
+    <img src="logo.jpg" class="logo" alt="Logo">
+
+    <div class="container">
+
+        <!-- Pantalla de bloqueo -->
+        <div id="pantallaBloqueo" style="display:none; text-align:center; padding:30px 10px;">
+            <div style="font-size:52px; margin-bottom:16px;">🔒</div>
+            <h2 style="color:#e74c3c; margin-bottom:10px;">Registro cerrado</h2>
+            <p style="color:#aac; font-size:15px; line-height:1.6;">
+                El registro de disponibilidad está temporalmente deshabilitado.<br>
+                Por favor intenta más tarde o contacta a la directiva.
+            </p>
+        </div>
+
+        <div id="contenidoPrincipal">
+            <h2>ENVIA TU DISPONIBILIDAD DE ABRIL</h2>
+
+            <div id="inicio">
+                <input id="nombre" placeholder="Escribe tu nombre y apellido">
+                <input id="telefono" type="tel" placeholder="WhatsApp (ej: 573001234567)" style="margin-top:8px;">
+                <p style="font-size:11px; color:#aac; margin:4px 0 10px; text-align:center;">Incluye código de país sin
+                    + (ej: 57 para Colombia)</p>
+                <button class="btn-main" onclick="iniciar()">Iniciar</button>
+            </div>
+
+<div id="instructivo" class="instructivo" style="display:none">
+                INSTRUCCIONES:
+                <br />1. Si ya seleccionaste los días en los que estás disponible pasa a la siguiente semana.
+                <br />2. Si en la semana ningun dia estaras disponible, simplemente continúa con la siguiente.
+                <br />3. Si eres musico y tambien vocalista, primero selecciona tu rol como vocalista, guarda y envia
+                tu disponibilidad de las semanas. Luego cambia a músico y selecciona tu disponibilidad como músico para
+                las semanas.
+                <br />4. Al finalizar la última semana, envía tu disponibilidad para que la directiva pueda organizarte
+                en el cronograma.
+            </div>
+
+            <div id="selectorTipo" style="display:none">
+                <p style="margin-bottom:6px; text-align:center;">Selecciona tu rol</p>
+                <div class="switch-container">
+                    <div class="switch-track" id="switchTrack" onclick="toggleRol()">
+                        <div class="switch-thumb" id="switchThumb"></div>
+                        <span class="switch-label left" id="labelVoz">🎤 Vocalista</span>
+                        <span class="switch-label right" id="labelMus">🎸 Músico</span>
+                    </div>
+                </div>
+                <div class="rol-badge" id="rolBadge">Estás en rol: <span id="rolNombre">Vocalista</span></div>
+            </div>
+
+            
+
+            <h3 id="tituloSemana" style="display:none">Semana 1</h3>
+
+            <!-- Wrapper con scroll horizontal -->
+            <div class="tabla-scroll" id="tablaWrapper" style="display:none">
+                <table id="tabla">
+                    <thead>
+                        <tr>
+                            <th>Rol</th>
+                        </tr>
+                    </thead>
+                    <tbody id="roles"></tbody>
+                </table>
+            </div>
+
+
+
+            <div class="navSemanas" id="navSemanas" style="display:none">
+                <button id="btnAnterior" onclick="semanaAnterior()">Semana anterior</button>
+                <button id="btnSiguiente" onclick="siguienteSemana()">Siguiente semana</button>
+            </div>
+
+        </div><!-- /contenidoPrincipal -->
+    </div><!-- /container -->
+
+    <footer>
+        APP DE PLANIFICACIÓN - MINISTERIO DE ALABANZA BELEN CENTRAL
+        <br>
+        <em>By GioApp</em>
+        <br>
+    </footer>
+
+    <!-- Firebase (module) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDoc, doc }
+            from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAt8MkqaV_sZimt2HVhTc8OKz8gKmoTRnE",
+            authDomain: "programador-banda.firebaseapp.com",
+            projectId: "programador-banda",
+            storageBucket: "programador-banda.firebasestorage.app",
+            messagingSenderId: "115612679276",
+            appId: "1:115612679276:web:7bb4c3897226134909ec49"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // ── Verificar si planificador está habilitado ──
+        (async () => {
+            try {
+                const snap = await getDoc(doc(db, "config", "planificador"));
+                const habilitado = snap.exists() ? snap.data().habilitado !== false : true;
+                if (!habilitado) {
+                    document.getElementById("pantallaBloqueo").style.display = "block";
+                    document.getElementById("contenidoPrincipal").style.display = "none";
+                }
+            } catch (e) {
+                // Si no se puede verificar, dejar acceso normal
+            }
+        })();
+
+        window.db = db;
+        window.collection = collection;
+        window.addDoc = addDoc;
+    </script>
+
+    <!-- Lógica principal -->
+    <script>
+        let semanaActual = 1;
+        let nombreUsuario = "";
+        let telefonoUsuario = "";
+        let tipoUsuario = "";
+        let weekData = { 1: [], 2: [], 3: [], 4: [], 5: [] };
+
+        const voces = ["Voz líder", "Voz apoyo", "Contralto", "Cuarta voz"];
+        const musicos = ["Pianista", "Guitarrista", "Bajista", "Baterista"];
+
+        const semanas = [
+            {
+                id: 1, descripcion: "Semana del 2 al 5 de abril",
+                fechas: ["Jueves 2 de abril", "Sábado 4 de abril", "Domingo 5 de abril (8:30AM)", "Domingo 5 de abril (10:30AM)", ""]
+            },
+            {
+                id: 2, descripcion: "Semana del 7 al 12 de abril",
+                fechas: ["Martes 7 de abril", "Jueves 9 de abril", "Sábado 11 de abril", "Domingo 12 de abril (8:30AM)", "Domingo 12 de abril (10:30AM)"]
+            },
+            {
+                id: 3, descripcion: "Semana del 14 al 19 de abril",
+                fechas: ["Martes 14 de abril", "Jueves 16 de abril", "Sábado 18 de abril", "Domingo 19 de abril (8:30AM)", "Domingo 19 de abril (10:30AM)"]
+            },
+            {
+                id: 4, descripcion: "Semana del 21 al 26 de abril",
+                fechas: ["Martes 21 de abril", "Jueves 23 de abril", "Sábado 25 de abril", "Domingo 26 de abril (8:30AM)", "Domingo 26 de abril (10:30AM)"]
+            },
+            {
+                id: 5, descripcion: "Semana del 28 al 30 de abril",
+                fechas: ["Martes 28 de abril", "Jueves 30 de abril"]
+            }
+        ];
+
+        function iniciar() {
+            nombreUsuario = document.getElementById("nombre").value.trim();
+            telefonoUsuario = document.getElementById("telefono").value.trim().replace(/\D/g, "");
+
+            if (!nombreUsuario) {
+                alert("⚠️ Por favor escribe tu nombre completo.");
+                document.getElementById("nombre").focus();
+                return;
+            }
+            const palabras = nombreUsuario.split(/\s+/).filter(Boolean);
+            if (palabras.length < 2) {
+                alert("⚠️ Escribe tu nombre Y apellido completos.");
+                document.getElementById("nombre").focus();
+                return;
+            }
+            if (!telefonoUsuario) {
+                alert("⚠️ Por favor escribe tu número de WhatsApp.");
+                document.getElementById("telefono").focus();
+                return;
+            }
+            if (telefonoUsuario.length < 10) {
+                alert("⚠️ El número de WhatsApp parece muy corto. Recuerda incluir el código de país (ej: 573001234567).");
+                document.getElementById("telefono").focus();
+                return;
+            }
+
+            document.getElementById("selectorTipo").style.display = "block";
+            // Arrancar con Vocalista seleccionado por defecto
+            toggleRolEstado("voces");
+        }
+
+        let rolActual = "voces";
+
+        function toggleRol() {
+            const nuevoRol = rolActual === "voces" ? "musicos" : "voces";
+            toggleRolEstado(nuevoRol);
+        }
+
+        function toggleRolEstado(rol) {
+            rolActual = rol;
+            const thumb = document.getElementById("switchThumb");
+            const labelVoz = document.getElementById("labelVoz");
+            const labelMus = document.getElementById("labelMus");
+            const rolNombre = document.getElementById("rolNombre");
+
+            if (rol === "musicos") {
+                thumb.classList.add("musico");
+                labelVoz.classList.add("inactivo");
+                labelMus.classList.remove("inactivo");
+                labelMus.classList.add("activo");
+                labelVoz.classList.remove("activo");
+                rolNombre.textContent = "Músico";
+            } else {
+                thumb.classList.remove("musico");
+                labelVoz.classList.remove("inactivo");
+                labelVoz.classList.add("activo");
+                labelMus.classList.remove("activo");
+                labelMus.classList.add("inactivo");
+                rolNombre.textContent = "Vocalista";
+            }
+            CargaUsuario(rol);
+        }
+
+        function CargaUsuario(tipo) {
+            tipoUsuario = tipo;
+            document.getElementById("tablaWrapper").style.display = "block";
+            document.getElementById("navSemanas").style.display = "flex";
+            document.getElementById("tituloSemana").style.display = "block";
+            document.getElementById("instructivo").style.display = "block";
+            crearTabla(tipo === "voces" ? voces : musicos);
+            actualizarBotones();
+            cargarSemana();
+        }
+
+        function crearTabla(lista) {
+            const tbody = document.getElementById("roles");
+            tbody.innerHTML = "";
+            lista.forEach((rol, filaIndex) => {
+                const fila = document.createElement("tr");
+                const celdaRol = document.createElement("td");
+                celdaRol.textContent = rol;
+                celdaRol.classList.add("role");
+                fila.appendChild(celdaRol);
+                semanas[semanaActual - 1].fechas.forEach((_, i) => {
+                    const celda = document.createElement("td");
+                    celda.classList.add("slot");
+                    celda.dataset.id = filaIndex + "-" + i;
+                    celda.onclick = function () {
+                        if (celda.classList.contains("selected")) {
+                            celda.classList.remove("selected");
+                            celda.textContent = "";
+                            weekData[semanaActual] = weekData[semanaActual].filter(x => x !== celda.dataset.id);
+                            return;
+                        }
+                        // Verificar que no haya otro rol ya seleccionado en el mismo día (misma columna)
+                        const columnaActual = celda.dataset.id.split("-")[1];
+                        const yaEscogio = weekData[semanaActual].some(id => id.split("-")[1] === columnaActual);
+                        if (yaEscogio) {
+                            alert("Solo puedes escoger un rol por día.");
+                            return;
+                        }
+                        celda.classList.add("selected");
+                        celda.textContent = nombreUsuario;
+                        weekData[semanaActual].push(celda.dataset.id);
+                    };
+                    fila.appendChild(celda);
+                });
+                tbody.appendChild(fila);
+            });
+        }
+
+        function limpiarTabla() {
+            document.querySelectorAll(".slot").forEach(c => { c.classList.remove("selected"); c.textContent = ""; });
+        }
+
+        function guardarSemana() {
+            const sel = [];
+            document.querySelectorAll(".slot.selected").forEach(c => sel.push(c.dataset.id));
+            weekData[semanaActual] = sel;
+        }
+
+        function cargarSemana() {
+            limpiarTabla();
+            const headersRow = document.querySelector("#tabla thead tr");
+            headersRow.innerHTML = "<th>Rol</th>";
+            semanas[semanaActual - 1].fechas.forEach(fecha => {
+                const th = document.createElement("th");
+                th.textContent = fecha;
+                headersRow.appendChild(th);
+            });
+            weekData[semanaActual].forEach(id => {
+                const celda = document.querySelector(`[data-id="${id}"]`);
+                if (celda) { celda.classList.add("selected"); celda.textContent = nombreUsuario; }
+            });
+            document.getElementById("tituloSemana").textContent = semanas[semanaActual - 1].descripcion;
+        }
+
+        function siguienteSemana() {
+            guardarSemana();
+            if (semanaActual < 5) { semanaActual++; cargarSemana(); }
+            actualizarBotones();
+        }
+
+        function semanaAnterior() {
+            guardarSemana();
+            if (semanaActual > 1) { semanaActual--; cargarSemana(); }
+            actualizarBotones();
+        }
+
+        function actualizarBotones() {
+            document.getElementById("btnAnterior").style.display = semanaActual === 1 ? "none" : "block";
+            const btn = document.getElementById("btnSiguiente");
+            if (semanaActual === 5) {
+                btn.textContent = "Enviar disponibilidad";
+                btn.onclick = enviarDisponibilidad;
+            } else {
+                btn.textContent = "Siguiente semana";
+                btn.onclick = siguienteSemana;
+            }
+        }
+
+        async function enviarDisponibilidad() {
+            guardarSemana();
+            const disponibilidad = [];
+            const listaRoles = tipoUsuario === "voces" ? voces : musicos;
+            for (let semana in weekData) {
+                weekData[semana].forEach(slot => {
+                    const [fila, columna] = slot.split("-").map(Number);
+                    const s = semanas[semana - 1];
+                    disponibilidad.push({
+                        semana: s.descripcion,
+                        dia: s.fechas[columna] || "",
+                        rol: listaRoles[fila] || "Desconocido"
+                    });
+                });
+            }
+            try {
+                await addDoc(collection(db, "disponibilidades"), { nombre: nombreUsuario, telefono: telefonoUsuario, tipo: tipoUsuario, disponibilidad });
+                alert("Disponibilidad enviada correctamente");
+                window.location.href = "index.html";
+            } catch (e) {
+                alert("Error enviando disponibilidad: " + e.message);
+            }
+        }
+
+        document.getElementById("nombre").addEventListener("keydown", e => { if (e.key === "Enter") iniciar(); });
+    </script>
+
+</body>
+
+</html>
