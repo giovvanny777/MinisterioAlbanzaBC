@@ -231,7 +231,7 @@
         const db = getFirestore(app);
 
         const semanas = [
-            { descripcion: "Semana del 2 al 5 de abril", fechas: ["Jueves 2 de abril  DIA DE CONVENCION NO HAY CULTO EN LA IGLESIA)", "Sábado 4 de abril", "Domingo 5 de abril (8:30AM)", "Domingo 5 de abril (10:30AM)", ""] },
+            { descripcion: "Semana del 2 al 5 de abril", fechas: ["Jueves 2 de abril", "Sábado 4 de abril", "Domingo 5 de abril (8:30AM)", "Domingo 5 de abril (10:30AM)", ""] },
             { descripcion: "Semana del 7 al 12 de abril", fechas: ["Martes 7 de abril", "Jueves 9 de abril", "Sábado 11 de abril", "Domingo 12 de abril (8:30AM)", "Domingo 12 de abril (10:30AM)"] },
             { descripcion: "Semana del 14 al 19 de abril", fechas: ["Martes 14 de abril", "Jueves 16 de abril", "Sábado 18 de abril", "Domingo 19 de abril (8:30AM)", "Domingo 19 de abril (10:30AM)"] },
             { descripcion: "Semana del 21 al 26 de abril", fechas: ["Martes 21 de abril", "Jueves 23 de abril", "Sábado 25 de abril", "Domingo 26 de abril (8:30AM)", "Domingo 26 de abril (10:30AM)"] },
@@ -410,11 +410,8 @@
                 let th = document.createElement('th');
 
                 if (fecha) {
-                    // Reemplazamos " " por saltos de línea en puntos estratégicos
+    
                     let textoFormateado = fecha
-                        .replace("DIA DE CONVENCION", "\nDIA DE CONVENCION")
-                        .replace("NO HAY CULTO", "\n(NO HAY CULTO");
-
                     th.textContent = textoFormateado;
                     th.classList.add('fecha-larga');
 
