@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <title>BACKUP - MINISTERIO DE ALABANZA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            margin: 0;
+            font-family: Montserrat, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .btn-home {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: #2c3e50;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 10;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            margin-top: 72px;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255,255,255,0.15);
+        }
+
+        h1 {
+            margin-top: 10px;
+            font-size: 16px;
+            text-align: center;
+            letter-spacing: 1px;
+            padding: 0 16px;
+        }
+
+        .container {
+            background: #1c2b33;
+            width: calc(100% - 20px);
+            max-width: 900px;
+            margin-top: 14px;
+            margin-bottom: 32px;
+            border-radius: 16px;
+            padding: 20px 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .fecha-backup {
+            text-align: center;
+            font-size: 12px;
+            color: #7a9baa;
+            margin-bottom: 16px;
+        }
+
+        .fecha-backup strong {
+            color: #00c9a7;
+        }
+
+        .selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .selector button {
+            flex: 1;
+            padding: 13px 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            font-family: Montserrat, sans-serif;
+            background: #00c9a7;
+            color: black;
+            transition: background 0.2s;
+            min-height: 48px;
+        }
+
+        .selector button.activo {
+            background: white;
+            color: #0f2027;
+            box-shadow: 0 0 14px rgba(255,255,255,0.35);
+        }
+
+        .semana {
+            margin-top: 22px;
+        }
+
+        .semana h3 {
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #cde8f0;
+            line-height: 1.4;
+            padding: 0 4px;
+        }
+
+        .tabla-scroll {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 8px;
+            margin-top: 6px;
+            display: block;
+        }
+
+        table {
+            border: 3px solid #000;
+            width: max-content;
+            min-width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        th, td {
+            padding: 10px 8px;
+            border: 2px solid #000;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        th {
+            background: #2c5364;
+            font-size: 11px;
+            line-height: 1.3;
+        }
+
+        td { background: #314e59; }
+
+        td.role {
+            font-weight: 600;
+            text-align: left;
+            padding-left: 10px;
+            min-width: 95px;
+            position: sticky;
+            left: 0;
+            z-index: 1;
+            background: #263f4a;
+            border-right: 2px solid #00c9a7;
+        }
+
+        .nombre-chip {
+            display: inline-block;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 6px;
+            padding: 3px 8px;
+            margin: 2px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .mensaje {
+            text-align: center;
+            margin-top: 30px;
+            opacity: 0.75;
+            padding: 0 20px;
+        }
+
+        .mensaje .icono { font-size: 40px; margin-bottom: 10px; }
+        .mensaje p { font-size: 14px; line-height: 1.6; }
+
+        .badge-backup {
+            display: inline-block;
+            background: #243942;
+            border: 1px solid #2f4b57;
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-size: 12px;
+            color: #a8d8ea;
+            margin-bottom: 14px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 18px 16px;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        @media (min-width: 480px) {
+            table { font-size: 13px; }
+            th { font-size: 12px; }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="directiva.html" class="btn-home">← Volver</a>
+
+    <img src="logo.jpg" class="logo" alt="Logo">
+    <h1>📦 BACKUP DE DISPONIBILIDADES</h1>
+
+    <div class="container">
+        <div id="contenido">
+            <div class="mensaje">
+                <div class="icono">⏳</div>
+                <p>Cargando backup...</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        APP DE PLANIFICACIÓN - MINISTERIO DE ALABANZA BELEN CENTRAL<br>
+        <em>By GioApp</em>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAt8MkqaV_sZimt2HVhTc8OKz8gKmoTRnE",
+            authDomain: "programador-banda.firebaseapp.com",
+            projectId: "programador-banda",
+            storageBucket: "programador-banda.firebasestorage.app",
+            messagingSenderId: "115612679276",
+            appId: "1:115612679276:web:7bb4c3897226134909ec49"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Las semanas se cargan del propio documento de backup (guardadas al crear el backup)
+        // o como fallback desde semanasActivas, para no depender de datos hardcodeados
+        let semanas = [];
+
+        const rolesVoces = ["Voz líder", "Voz apoyo", "Contralto", "Tercera voz"];
+        const rolesMusicos = ["Pianista", "Guitarrista", "Bajista", "Baterista"];
+
+        let backupDatos = [];
+        let tipoActivo = "voces";
+
+        async function init() {
+            try {
+                const snap = await getDoc(doc(db, "backups", "ultimo"));
+
+                if (!snap.exists()) {
+                    document.getElementById("contenido").innerHTML = `
+                        <div class="mensaje">
+                            <div class="icono">📭</div>
+                            <p>No hay ningún backup guardado todavía.<br>Ve a directiva y presiona <strong>"📦 Crear backup"</strong>.</p>
+                        </div>`;
+                    return;
+                }
+
+                const data = snap.data();
+                backupDatos = data.datos || [];
+
+                // Cargar semanas desde el backup; si no existen, cargar desde semanasActivas
+                if (data.semanas && data.semanas.length > 0) {
+                    semanas = data.semanas.map((s, i) => ({ id: i + 1, ...s }));
+                } else {
+                    const semanasSnap = await getDoc(doc(db, "config", "semanasActivas"));
+                    const raw = semanasSnap.exists() ? (semanasSnap.data().semanas || []) : [];
+                    semanas = raw.map((s, i) => ({ id: i + 1, ...s }));
+                }
+
+                const fecha = new Date(data.fecha);
+                const fechaStr = fecha.toLocaleDateString('es-CO', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                const horaStr = fecha.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+
+                const contenido = document.getElementById("contenido");
+                contenido.innerHTML = `
+                    <div style="text-align:center; margin-bottom:16px;">
+                        <div class="badge-backup">📅 Guardado el ${fechaStr} a las ${horaStr}</div>
+                    </div>
+                    <div class="selector">
+                        <button id="btnVoces" class="activo" onclick="mostrar('voces')">🎤 Voces</button>
+                        <button id="btnMusicos" onclick="mostrar('musicos')">🎸 Músicos</button>
+                    </div>
+                    <div id="tablas"></div>`;
+
+                renderTablas("voces");
+
+            } catch (e) {
+                console.error(e);
+                document.getElementById("contenido").innerHTML = `
+                    <div class="mensaje">
+                        <div class="icono">⚠️</div>
+                        <p>Error al cargar el backup. Intenta nuevamente.</p>
+                    </div>`;
+            }
+        }
+
+        function mostrar(tipo) {
+            tipoActivo = tipo;
+            document.getElementById("btnVoces").classList.toggle("activo", tipo === "voces");
+            document.getElementById("btnMusicos").classList.toggle("activo", tipo === "musicos");
+            renderTablas(tipo);
+        }
+
+        function renderTablas(tipo) {
+            const container = document.getElementById("tablas");
+            container.innerHTML = "";
+
+            const listaRoles = tipo === "voces" ? rolesVoces : rolesMusicos;
+
+            // Agrupar por semana
+            const reservasPorSemana = {};
+            backupDatos.forEach(data => {
+                if (!data.tipo || data.tipo.toLowerCase() !== tipo) return;
+                (data.disponibilidad || []).forEach(item => {
+                    if (!reservasPorSemana[item.semana]) reservasPorSemana[item.semana] = [];
+                    reservasPorSemana[item.semana].push({
+                        nombre: data.nombre,
+                        rol: item.rol,
+                        dia: item.dia
+                    });
+                });
+            });
+
+            let hayDatos = false;
+
+            semanas.forEach(semana => {
+                if (!reservasPorSemana[semana.descripcion]) return;
+                hayDatos = true;
+
+                const semanaDiv = document.createElement("div");
+                semanaDiv.classList.add("semana");
+
+                const h3 = document.createElement("h3");
+                h3.textContent = semana.descripcion;
+                semanaDiv.appendChild(h3);
+
+                const scrollDiv = document.createElement("div");
+                scrollDiv.classList.add("tabla-scroll");
+
+                const table = document.createElement("table");
+                const thead = document.createElement("thead");
+                const headerRow = document.createElement("tr");
+
+                const thRol = document.createElement("th");
+                thRol.textContent = "Rol";
+                headerRow.appendChild(thRol);
+
+                semana.fechas.forEach(fecha => {
+                    const th = document.createElement("th");
+                    th.textContent = fecha;
+                    headerRow.appendChild(th);
+                });
+
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+
+                const tbody = document.createElement("tbody");
+
+                listaRoles.forEach(rol => {
+                    const fila = document.createElement("tr");
+
+                    const rolTd = document.createElement("td");
+                    rolTd.textContent = rol;
+                    rolTd.classList.add("role");
+                    fila.appendChild(rolTd);
+
+                    semana.fechas.forEach(fecha => {
+                        const td = document.createElement("td");
+                        td.style.padding = "6px 8px";
+
+                        const reservas = (reservasPorSemana[semana.descripcion] || [])
+                            .filter(r => r.rol === rol && r.dia === fecha);
+
+                        reservas.forEach(r => {
+                            const chip = document.createElement("span");
+                            chip.classList.add("nombre-chip");
+                            chip.textContent = r.nombre;
+                            td.appendChild(chip);
+                        });
+
+                        fila.appendChild(td);
+                    });
+
+                    tbody.appendChild(fila);
+                });
+
+                table.appendChild(tbody);
+                scrollDiv.appendChild(table);
+                semanaDiv.appendChild(scrollDiv);
+                container.appendChild(semanaDiv);
+            });
+
+            if (!hayDatos) {
+                container.innerHTML = `
+                    <div class="mensaje">
+                        <div class="icono">📭</div>
+                        <p>No hay datos de ${tipo} en este backup.</p>
+                    </div>`;
+            }
+        }
+
+        window.mostrar = mostrar;
+        init();
+    </script>
+</body>
+</html>

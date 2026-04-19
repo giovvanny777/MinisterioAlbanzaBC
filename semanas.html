@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <title>Configurar Semanas - Ministerio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            margin: 0;
+            font-family: Montserrat, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .btn-back {
+            position: absolute; top: 14px; left: 14px;
+            background: #2c3e50; color: white;
+            padding: 10px 16px; border-radius: 10px;
+            text-decoration: none; font-weight: 600; font-size: 14px;
+            z-index: 10; min-height: 44px; display: flex; align-items: center;
+        }
+        .logo {
+            margin-top: 72px; width: 80px; height: 80px;
+            border-radius: 50%; object-fit: cover;
+            border: 3px solid rgba(255,255,255,0.15);
+        }
+        h1 { margin-top: 10px; font-size: 15px; text-align: center; letter-spacing: 1px; padding: 0 16px; }
+        .container {
+            background: #1c2b33; width: calc(100% - 20px);
+            max-width: 600px; margin-top: 14px; margin-bottom: 32px;
+            border-radius: 16px; padding: 20px 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+        .aviso {
+            background: #243942; border-left: 3px solid #ffd166;
+            border-radius: 8px; padding: 10px 14px;
+            font-size: 12px; color: #ffd166; line-height: 1.6; margin-bottom: 16px;
+        }
+        select, input[type="text"], input[type="number"] {
+            width: 100%; padding: 13px 12px; border-radius: 10px; border: none;
+            font-family: Montserrat, sans-serif; font-size: 16px;
+            color: #222; background: #f0f0f0; margin-bottom: 8px;
+            outline: none; appearance: none; -webkit-appearance: none;
+            display: block;
+        }
+        input[type="number"] {
+            appearance: textfield; /* Propiedad estándar */
+            -moz-appearance: textfield; /* Firefox */
+            -webkit-appearance: none; /* WebKit */
+        }
+        input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+        .fila-dias { display: flex; gap: 6px; flex-wrap: wrap; }
+        .fila-dias select, .fila-dias input { flex: 1; min-width: 80px; margin-bottom: 0; }
+        .btn {
+            width: 100%; border: none; padding: 13px; border-radius: 10px;
+            font-weight: 600; font-family: Montserrat, sans-serif;
+            font-size: 14px; cursor: pointer; min-height: 48px;
+            margin-top: 6px; transition: background 0.2s;
+        }
+        .btn-verde { background: #00c9a7; color: #0f2027; }
+        .btn-verde:active { background: #00a88c; }
+        .btn-gris { background: #2c3e50; color: white; }
+        .btn-gris:active { background: #1a252f; }
+        .btn-rojo { background: #e74c3c; color: white; }
+        .btn-rojo:active { background: #c0392b; }
+        .btn-amarillo { background: #ffd166; color: #0f2027; }
+        .btn-amarillo:active { background: #e6b84d; }
+        .seccion-titulo {
+            font-size: 12px; font-weight: 600; color: #7a9baa;
+            text-align: center; margin: 14px 0 8px; letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        /* Lista de semanas guardadas */
+        .semana-item {
+            background: #243942; border-radius: 10px;
+            padding: 12px 14px; margin-bottom: 8px;
+        }
+        .semana-item .sem-desc {
+            font-size: 13px; font-weight: 600; color: #00c9a7; margin-bottom: 6px;
+        }
+        .semana-item .sem-dias {
+            font-size: 11px; color: #a8d8ea; line-height: 1.8;
+        }
+        .semana-item .sem-actions {
+            display: flex; gap: 8px; margin-top: 10px;
+        }
+        .semana-item .sem-actions button {
+            flex: 1; border: none; border-radius: 8px; padding: 8px;
+            font-family: Montserrat, sans-serif; font-size: 12px;
+            font-weight: 600; cursor: pointer; min-height: 36px;
+        }
+        /* Constructor de días */
+        .dias-preview {
+            background: #162d38; border-radius: 8px;
+            padding: 10px 12px; margin-bottom: 8px; min-height: 40px;
+        }
+        .dia-tag {
+            display: inline-flex; align-items: center; gap: 4px;
+            background: #2c5364; border-radius: 6px;
+            padding: 4px 10px; margin: 3px 3px;
+            font-size: 12px; color: white;
+        }
+        .dia-tag button {
+            background: none; border: none; color: #ff6b6b;
+            cursor: pointer; font-size: 16px; line-height: 1;
+            padding: 0; font-family: Montserrat, sans-serif;
+        }
+        .separador {
+            border: none; border-top: 1px solid #2f4b57; margin: 16px 0;
+        }
+        .formulario-nueva {
+            background: #243942; border-radius: 10px; padding: 14px;
+        }
+        footer {
+            text-align: center; padding: 18px 16px;
+            font-size: 12px; opacity: 0.7;
+        }
+        #loadingMsg { text-align: center; padding: 20px; color: #7a9baa; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <a href="directiva.html" class="btn-back">← Volver</a>
+    <img src="logo.jpg" class="logo" alt="Logo">
+    <h1>📆 CONFIGURAR SEMANAS DEL MES</h1>
+
+    <div class="container">
+        <div class="aviso">
+            ⚠️ <strong>Semanas del próximo mes:</strong> configúralas aquí con tiempo. Solo se activarán en directiva y cronograma cuando presiones <strong>"✅ Activar semanas"</strong>. El planificador las usará desde que las guardes.
+        </div>
+
+        <!-- Semanas activas actualmente -->
+        <div class="seccion-titulo">Semanas activas ahora (directiva y cronograma)</div>
+        <div id="listaSemanasActivas">
+            <div style="text-align:center;font-size:12px;color:#7a9baa;padding:8px;">⏳ Cargando...</div>
+        </div>
+
+        <hr class="separador">
+
+        <!-- Semanas del próximo mes -->
+        <div class="seccion-titulo">Semanas del próximo mes (planificador)</div>
+        <div id="listaSemanas">
+            <div id="loadingMsg">⏳ Cargando...</div>
+        </div>
+
+        <button class="btn btn-rojo" onclick="limpiarSemanas()" style="margin-top:8px;">
+            🗑️ Limpiar todas las semanas del próximo mes
+        </button>
+
+        <button class="btn btn-amarillo" onclick="activarSemanas()" style="margin-top:8px;">
+            ✅ Activar semanas → pasar al cronograma y directiva
+        </button>
+
+        <hr class="separador">
+
+        <!-- Formulario nueva semana -->
+        <div class="seccion-titulo">Agregar nueva semana</div>
+        <div class="formulario-nueva">
+
+            <!-- Descripción -->
+            <p style="font-size:11px;color:#7a9baa;margin:0 0 6px;font-weight:600;">Descripción de la semana</p>
+            <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
+                <input type="number" id="diaInicio" placeholder="Día inicio" min="1" max="31"
+                    style="flex:1;min-width:80px;margin-bottom:0;" oninput="generarDescripcion()">
+                <input type="number" id="diaFin" placeholder="Día fin" min="1" max="31"
+                    style="flex:1;min-width:80px;margin-bottom:0;" oninput="generarDescripcion()">
+                <select id="mesSemana" style="flex:2;min-width:120px;margin-bottom:0;" onchange="generarDescripcion()">
+                    <option value="enero">Enero</option>
+                    <option value="febrero">Febrero</option>
+                    <option value="marzo">Marzo</option>
+                    <option value="abril">Abril</option>
+                    <option value="mayo">Mayo</option>
+                    <option value="junio">Junio</option>
+                    <option value="julio">Julio</option>
+                    <option value="agosto">Agosto</option>
+                    <option value="septiembre">Septiembre</option>
+                    <option value="octubre">Octubre</option>
+                    <option value="noviembre">Noviembre</option>
+                    <option value="diciembre">Diciembre</option>
+                </select>
+            </div>
+            <input type="text" id="descripcionSemana" placeholder="Ej: Semana del 5 al 11 de mayo"
+                style="margin-bottom:12px;">
+
+            <!-- Constructor de días -->
+            <p style="font-size:11px;color:#7a9baa;margin:0 0 6px;font-weight:600;">Días de servicio</p>
+            <div class="fila-dias" style="margin-bottom:8px;">
+                <select id="diaSemana" style="flex:2;min-width:110px;margin-bottom:0;">
+                    <option value="Lunes">Lunes</option>
+                    <option value="Martes">Martes</option>
+                    <option value="Miércoles">Miércoles</option>
+                    <option value="Jueves">Jueves</option>
+                    <option value="Viernes">Viernes</option>
+                    <option value="Sábado">Sábado</option>
+                    <option value="Domingo">Domingo</option>
+                </select>
+                <input type="number" id="numeroDia" placeholder="Nº" min="1" max="31"
+                    style="flex:1;min-width:60px;margin-bottom:0;">
+                <select id="mesDia" style="flex:2;min-width:110px;margin-bottom:0;">
+                    <option value="enero">Enero</option>
+                    <option value="febrero">Febrero</option>
+                    <option value="marzo">Marzo</option>
+                    <option value="abril">Abril</option>
+                    <option value="mayo">Mayo</option>
+                    <option value="junio">Junio</option>
+                    <option value="julio">Julio</option>
+                    <option value="agosto">Agosto</option>
+                    <option value="septiembre">Septiembre</option>
+                    <option value="octubre">Octubre</option>
+                    <option value="noviembre">Noviembre</option>
+                    <option value="diciembre">Diciembre</option>
+                </select>
+                <select id="sufijoDia" style="flex:2;min-width:110px;margin-bottom:0;">
+                    <option value="">Sin hora</option>
+                    <option value=" (8:30AM)">(8:30AM)</option>
+                    <option value=" (10:30AM)">(10:30AM)</option>
+                </select>
+            </div>
+            <button class="btn btn-gris" onclick="agregarDia()" style="margin-bottom:10px;">
+                ➕ Agregar día
+            </button>
+
+            <!-- Preview días agregados -->
+            <p style="font-size:11px;color:#7a9baa;margin:0 0 6px;font-weight:600;">Días agregados:</p>
+            <div class="dias-preview" id="diasPreview">
+                <span style="font-size:11px;color:#7a9baa;">Ningún día agregado aún</span>
+            </div>
+
+            <button class="btn btn-verde" onclick="guardarSemana()" style="margin-top:10px;">
+                💾 Guardar semana
+            </button>
+        </div>
+    </div>
+
+    <footer>APP DE PLANIFICACIÓN - MINISTERIO DE ALABANZA BELEN CENTRAL<br><em>By GioApp</em></footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAt8MkqaV_sZimt2HVhTc8OKz8gKmoTRnE",
+            authDomain: "programador-banda.firebaseapp.com",
+            projectId: "programador-banda",
+            storageBucket: "programador-banda.firebasestorage.app",
+            messagingSenderId: "115612679276",
+            appId: "1:115612679276:web:7bb4c3897226134909ec49"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let semanas = [];
+        let diasNuevaSemana = [];
+
+        // ── Cargar semanas activas (directiva y cronograma) ───────────────
+        async function cargarSemanasActivas() {
+            try {
+                const snap = await getDoc(doc(db, "config", "semanasActivas"));
+                const activas = snap.exists() ? (snap.data().semanas || []) : [];
+                const lista = document.getElementById("listaSemanasActivas");
+                if (activas.length === 0) {
+                    lista.innerHTML = '<p style="text-align:center;font-size:12px;color:#7a9baa;padding:8px;">Sin semanas activas. Presiona "Activar semanas" cuando estés listo.</p>';
+                    return;
+                }
+                lista.innerHTML = "";
+                activas.forEach(sem => {
+                    const div = document.createElement("div");
+                    div.classList.add("semana-item");
+                    div.style.borderLeft = "3px solid #00c9a7";
+                    div.innerHTML = `
+                        <div class="sem-desc" style="color:#00c9a7;">✅ ${sem.descripcion}</div>
+                        <div class="sem-dias">${sem.fechas.map(f => "• " + f).join("<br>")}</div>`;
+                    lista.appendChild(div);
+                });
+            } catch (e) {
+                document.getElementById("listaSemanasActivas").innerHTML = '<p style="color:#e74c3c;font-size:12px;text-align:center;">Error al cargar semanas activas.</p>';
+            }
+        }
+
+        // ── Activar semanas → copiar a semanasActivas ─────────────────────
+        window.limpiarSemanas = async function() {
+            if (semanas.length === 0) { alert("Ya no hay semanas configuradas."); return; }
+            if (!confirm(`¿Borrar todas las ${semanas.length} semanas del próximo mes?\n\nEsto NO afecta las semanas activas ni el cronograma publicado.`)) return;
+            try {
+                semanas = [];
+                await setDoc(doc(db, "config", "semanas"), { semanas: [] });
+                renderListaSemanas();
+                alert("✅ Semanas del próximo mes limpiadas correctamente.");
+            } catch (e) {
+                alert("❌ Error al limpiar: " + e.message);
+            }
+        };
+
+        window.activarSemanas = async function() {
+            if (semanas.length === 0) {
+                alert("⚠️ No hay semanas del próximo mes configuradas para activar.");
+                return;
+            }
+            if (!confirm(`¿Activar las ${semanas.length} semanas del próximo mes?\n\nEstas reemplazarán las semanas activas en directiva y cronograma.\n\n${semanas.map(s => "• " + s.descripcion).join("\n")}`)) return;
+            try {
+                await setDoc(doc(db, "config", "semanasActivas"), { semanas });
+                await cargarSemanasActivas();
+                alert("✅ ¡Semanas activadas! Ya están disponibles en directiva y cronograma.");
+            } catch (e) {
+                alert("❌ Error al activar: " + e.message);
+            }
+        };
+
+        // ── Cargar semanas próximo mes ────────────────────────────────────
+        async function cargarSemanas() {
+            try {
+                const snap = await getDoc(doc(db, "config", "semanas"));
+                semanas = snap.exists() ? (snap.data().semanas || []) : [];
+                renderListaSemanas();
+            } catch (e) {
+                document.getElementById("loadingMsg").textContent = "❌ Error al cargar las semanas.";
+            }
+        }
+
+        function renderListaSemanas() {
+            const lista = document.getElementById("listaSemanas");
+            if (semanas.length === 0) {
+                lista.innerHTML = '<p style="text-align:center;font-size:12px;color:#7a9baa;margin:0;">Sin semanas configuradas. Agrega la primera abajo.</p>';
+                return;
+            }
+            lista.innerHTML = "";
+            semanas.forEach((sem, idx) => {
+                const div = document.createElement("div");
+                div.classList.add("semana-item");
+                div.innerHTML = `
+                    <div class="sem-desc">📅 ${sem.descripcion}</div>
+                    <div class="sem-dias">${sem.fechas.map(f => "• " + f).join("<br>")}</div>
+                    <div class="sem-actions">
+                        <button onclick="subirSemana(${idx})" style="background:#2c3e50;color:white;">↑ Subir</button>
+                        <button onclick="bajarSemana(${idx})" style="background:#2c3e50;color:white;">↓ Bajar</button>
+                        <button onclick="eliminarSemanaConfig(${idx})" style="background:#e74c3c;color:white;">🗑️ Eliminar</button>
+                    </div>`;
+                lista.appendChild(div);
+            });
+        }
+
+        // ── Guardar en Firestore (próximo mes) ────────────────────────────
+        async function persistir() {
+            await setDoc(doc(db, "config", "semanas"), { semanas });
+        }
+
+        // ── Acciones sobre semanas ────────────────────────────────────────
+        window.subirSemana = async function(idx) {
+            if (idx === 0) return;
+            [semanas[idx - 1], semanas[idx]] = [semanas[idx], semanas[idx - 1]];
+            await persistir();
+            renderListaSemanas();
+        };
+
+        window.bajarSemana = async function(idx) {
+            if (idx === semanas.length - 1) return;
+            [semanas[idx], semanas[idx + 1]] = [semanas[idx + 1], semanas[idx]];
+            await persistir();
+            renderListaSemanas();
+        };
+
+        window.eliminarSemanaConfig = async function(idx) {
+            const sem = semanas[idx];
+            if (!confirm(`¿Eliminar "${sem.descripcion}"?\n\nEsto no borra datos de disponibilidad en Firebase, solo quita la semana de la configuración.`)) return;
+            semanas.splice(idx, 1);
+            await persistir();
+            renderListaSemanas();
+            alert("✅ Semana eliminada de la configuración.");
+        };
+
+        // ── Constructor de días ───────────────────────────────────────────
+        window.generarDescripcion = function() {
+            const ini = document.getElementById("diaInicio").value;
+            const fin = document.getElementById("diaFin").value;
+            const mes = document.getElementById("mesSemana").value;
+            if (ini && fin && mes) {
+                document.getElementById("descripcionSemana").value =
+                    `Semana del ${ini} al ${fin} de ${mes}`;
+            }
+            // Sincronizar mes del constructor de días
+            document.getElementById("mesDia").value = mes;
+        };
+
+        window.agregarDia = function() {
+            const dia = document.getElementById("diaSemana").value;
+            const num = document.getElementById("numeroDia").value.trim();
+            const mes = document.getElementById("mesDia").value;
+            const sufijo = document.getElementById("sufijoDia").value;
+
+            if (!num) { alert("⚠️ Ingresa el número del día"); return; }
+
+            const texto = `${dia} ${num} de ${mes}${sufijo}`;
+            diasNuevaSemana.push(texto);
+            renderDiasPreview();
+
+            // Limpiar número y sufijo para facilitar agregar el siguiente
+            document.getElementById("numeroDia").value = "";
+            document.getElementById("sufijoDia").value = "";
+        };
+
+        function renderDiasPreview() {
+            const container = document.getElementById("diasPreview");
+            if (diasNuevaSemana.length === 0) {
+                container.innerHTML = '<span style="font-size:11px;color:#7a9baa;">Ningún día agregado aún</span>';
+                return;
+            }
+            container.innerHTML = "";
+            diasNuevaSemana.forEach((d, i) => {
+                const tag = document.createElement("span");
+                tag.classList.add("dia-tag");
+                tag.innerHTML = `${d} <button onclick="quitarDia(${i})">×</button>`;
+                container.appendChild(tag);
+            });
+        }
+
+        window.quitarDia = function(i) {
+            diasNuevaSemana.splice(i, 1);
+            renderDiasPreview();
+        };
+
+        window.guardarSemana = async function() {
+            const desc = document.getElementById("descripcionSemana").value.trim();
+            if (!desc) { alert("⚠️ Escribe la descripción de la semana"); return; }
+            if (diasNuevaSemana.length === 0) { alert("⚠️ Agrega al menos un día de servicio"); return; }
+
+            semanas.push({ descripcion: desc, fechas: [...diasNuevaSemana] });
+            await persistir();
+
+            // Resetear formulario
+            document.getElementById("descripcionSemana").value = "";
+            document.getElementById("diaInicio").value = "";
+            document.getElementById("diaFin").value = "";
+            document.getElementById("numeroDia").value = "";
+            document.getElementById("sufijoDia").value = "";
+            diasNuevaSemana = [];
+            renderDiasPreview();
+            renderListaSemanas();
+            alert("✅ Semana guardada correctamente.");
+        };
+
+        cargarSemanas();
+        cargarSemanasActivas();
+
+        // Seleccionar el mes siguiente al actual por defecto en ambos selectores
+        (function() {
+            const meses = ["enero","febrero","marzo","abril","mayo","junio",
+                           "julio","agosto","septiembre","octubre","noviembre","diciembre"];
+            const mesIdx = (new Date().getMonth() + 1) % 12; // mes siguiente
+            const mesVal = meses[mesIdx];
+            document.getElementById("mesSemana").value = mesVal;
+            document.getElementById("mesDia").value = mesVal;
+        })();
+    </script>
+</body>
+</html>
