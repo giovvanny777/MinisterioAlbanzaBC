@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <title>MINISTERIO DE ALABANZA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Montserrat, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        .btn-home {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: #2c3e50;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            transition: 0.3s;
+            z-index: 10;
+        }
+
+        .logo {
+            margin-top: 72px;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            animation: pulse 2.4s ease-in-out infinite;
+         }   
+          
+        @keyframes pulse {
+    0%   { transform: scale(1);    box-shadow: 0 0 0 0 rgba(0,201,167,0.45); }
+    50%  { transform: scale(1.06); box-shadow: 0 0 0 12px rgba(0,201,167,0); }
+    100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(0,201,167,0); }
+        }
+
+        h1 {
+            margin-top: 12px;
+            font-size: 18px;
+            text-align: center;
+            letter-spacing: 1px;
+            padding: 0 16px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 960px;
+            padding: 0 14px;
+            margin-top: 10px;
+            margin-bottom: 40px;
+        }
+
+        .semana-bloque {
+            background: #1c2b33;
+            border-radius: 14px;
+            padding: 18px 14px;
+            margin-top: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .semana-bloque h2 {
+            text-align: center;
+            margin-top: 0;
+            color: #00c9a7;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        .seccion-titulo {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 16px 0 6px;
+            color: #a8d8ea;
+        }
+
+        .tabla-scroll {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 6px;
+        }
+
+        table {
+            width: 100%;
+            min-width: 400px;
+            border-collapse: collapse;
+            font-size: 12.5px;
+        }
+
+        th,
+        td {
+            padding: 12px 8px;
+            border: 1px solid #2f4b57;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        th {
+            background: #2c5364;
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 1.45;
+            white-space: pre-line;
+            /* Permite saltos de línea con \n */
+            word-break: break-word;
+        }
+
+        td {
+            background: #314e59;
+            white-space: normal;
+            line-height: 1.5;
+        }
+
+        td.ocupado {
+            background: #ff6b6b;
+            font-weight: 600;
+        }
+
+        /* Estilo especial para encabezados de fecha largos */
+        th.fecha-larga {
+            font-size: 10.8px;
+            line-height: 1.4;
+            padding: 10px 6px;
+        }
+
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 20px;
+            font-size: 10px;
+            opacity: 0.85;
+        }
+
+        .mensaje {
+            text-align: center;
+            margin-top: 60px;
+            opacity: 0.75;
+            padding: 0 20px;
+        }
+
+        .mensaje .icono {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .mensaje p {
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .ensayo-card {
+            background: #162d38;
+            border-left: 3px solid #00c9a7;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin: 10px 0 4px;
+        }
+
+        .ensayo-card.evento {
+            background: #1e1535;
+            border-left-color: #a855f7;
+        }
+
+        .ensayo-card .ens-titulo {
+            color: #00c9a7;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .ensayo-card.evento .ens-titulo {
+            color: #c084fc;
+        }
+
+        .ensayo-card .ens-conv {
+            color: #a8d8ea;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <a href="index.html" class="btn-home">🏠 Inicio</a>
+
+    <img src="logo.jpg" class="logo" alt="Logo">
+    <h1>📅 CRONOGRAMA MENSUAL</h1>
+
+    <div class="container" id="contenedor">
+        <div class="mensaje">
+            <div class="icono">⏳</div>
+            <p>Cargando cronograma...</p>
+        </div>
+    </div>
+
+    <footer>
+        APP DE PLANIFICACIÓN - MINISTERIO DE ALABANZA BELEN CENTRAL
+        <br>
+        <em>By GioApp</em>
+        <br>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const rolesVoces = ["Voz líder", "Voz apoyo", "Contralto", "Tercera voz"];
+        const rolesMusicos = ["Pianista", "Guitarrista", "Bajista", "Baterista"];
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAt8MkqaV_sZimt2HVhTc8OKz8gKmoTRnE",
+            authDomain: "programador-banda.firebaseapp.com",
+            projectId: "programador-banda",
+            storageBucket: "programador-banda.firebasestorage.app",
+            messagingSenderId: "115612679276",
+            appId: "1:115612679276:web:7bb4c3897226134909ec49"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let semanas = [];
+        let semanasPublicadas = [];
+        let todosDisp = [];
+        let todosEnsayos = [];
+
+        async function init() {
+            try {
+                // Cargar semanas activas
+                const semanasSnap = await getDoc(doc(db, "config", "semanasActivas"));
+                semanas = semanasSnap.exists() ? (semanasSnap.data().semanas || []) : [];
+
+                const configSnap = await getDoc(doc(db, "config", "cronograma"));
+
+                if (!configSnap.exists() || configSnap.data().publicado !== true) {
+                    document.getElementById("contenedor").innerHTML = `
+                    <div class="mensaje">
+                        <div class="icono">🔒</div>
+                        <p>El cronograma aún no ha sido publicado por la directiva.</p>
+                    </div>`;
+                    return;
+                }
+
+                const configData = configSnap.data();
+                semanasPublicadas = configData.semanasPublicadas || semanas.map(s => s.descripcion);
+                const anotaciones = configData.anotaciones || {};
+
+                if (semanasPublicadas.length === 0) {
+                    document.getElementById("contenedor").innerHTML = `
+                    <div class="mensaje">
+                        <div class="icono">📭</div>
+                        <p>No hay semanas publicadas todavía.</p>
+                    </div>`;
+                    return;
+                }
+
+                // Leer disponibilidades del snapshot congelado (no se afectan al borrar Firebase)
+                const pubSnap = await getDoc(doc(db, "config", "cronogramaPublicado"));
+                todosDisp = pubSnap.exists() ? (pubSnap.data().disponibilidades || []) : [];
+
+                // Ensayos y anotaciones siguen en tiempo real
+                onSnapshot(collection(db, "ensayos"), (snapshot) => {
+                    todosEnsayos = [];
+                    snapshot.forEach(d => todosEnsayos.push({ id: d.id, ...d.data() }));
+                    renderCronograma(todosDisp, anotaciones, todosEnsayos);
+                });
+
+            } catch (e) {
+                console.error(e);
+                document.getElementById("contenedor").innerHTML = `
+                <div class="mensaje">
+                    <div class="icono">⚠️</div>
+                    <p>Error al cargar el cronograma. Intenta nuevamente.</p>
+                </div>`;
+            }
+        }
+
+        function renderCronograma(todos, anotaciones = {}, ensayos = []) {
+            const contenedor = document.getElementById("contenedor");
+            contenedor.innerHTML = "";
+
+            const datos = { voces: {}, musicos: {} };
+
+            // Agrupar ensayos por semana
+            const ensayosPorSemana = {};
+            ensayos.forEach(e => {
+                if (!ensayosPorSemana[e.semana]) ensayosPorSemana[e.semana] = [];
+                ensayosPorSemana[e.semana].push(e);
+            });
+
+            // Organizar datos
+            todos.forEach(data => {
+                if (!data.tipo || !data.disponibilidad) return;
+                const tipo = data.tipo.toLowerCase();
+                if (tipo !== "voces" && tipo !== "musicos") return;
+
+                data.disponibilidad.forEach(item => {
+                    if (!datos[tipo][item.semana]) datos[tipo][item.semana] = [];
+                    datos[tipo][item.semana].push({
+                        nombre: data.nombre,
+                        rol: item.rol,
+                        dia: item.dia
+                    });
+                });
+            });
+
+            // Solo renderizar las semanas que la directiva publicó
+            const semanasAFiltrar = semanas.filter(semana =>
+                semanasPublicadas.includes(semana.descripcion)
+            );
+
+            semanasAFiltrar.forEach(semana => {
+                const tieneVoces = datos.voces[semana.descripcion] && datos.voces[semana.descripcion].length > 0;
+                const tieneMusicos = datos.musicos[semana.descripcion] && datos.musicos[semana.descripcion].length > 0;
+                const tieneEnsayos = ensayosPorSemana[semana.descripcion] && ensayosPorSemana[semana.descripcion].length > 0;
+
+                if (!tieneVoces && !tieneMusicos && !tieneEnsayos) return;
+
+                const bloque = document.createElement('div');
+                bloque.classList.add('semana-bloque');
+
+                let h2 = document.createElement('h2');
+                h2.textContent = semana.descripcion;
+                bloque.appendChild(h2);
+
+                // Tarjetas de ensayo
+                if (tieneEnsayos) {
+                    ensayosPorSemana[semana.descripcion].forEach(e => {
+                        const esEvento = e.tipo === "evento";
+                        const icono = esEvento ? "🎉" : "🥁";
+                        const etiqueta = esEvento ? "EVENTO" : "ENSAYO";
+                        const convTexto = e.convocatoria === 'todos' ? '🏛️ Todo el ministerio'
+                            : e.convocatoria === 'voces' ? '🎤 Solo voces'
+                                : e.convocatoria === 'musicos' ? '🎸 Solo músicos'
+                                    : '👥 ' + (e.personas || []).join(', ');
+
+                        const card = document.createElement('div');
+                        card.classList.add('ensayo-card');
+                        if (esEvento) card.classList.add('evento');
+                        card.innerHTML = `
+                            <div class="ens-titulo">${icono} ${etiqueta} — ${e.fecha} · ${e.hora}</div>
+                            <div class="ens-conv">Convocatoria: ${convTexto}</div>`;
+                        bloque.appendChild(card);
+                    });
+                }
+
+                if (tieneVoces) {
+                    let tituloV = document.createElement('p');
+                    tituloV.classList.add('seccion-titulo');
+                    tituloV.textContent = "🎤 Voces";
+                    bloque.appendChild(tituloV);
+                    bloque.appendChild(crearTabla(semana, datos.voces[semana.descripcion] || [], rolesVoces, anotaciones));
+                }
+
+                if (tieneMusicos) {
+                    let tituloM = document.createElement('p');
+                    tituloM.classList.add('seccion-titulo');
+                    tituloM.textContent = "🎸 Músicos";
+                    bloque.appendChild(tituloM);
+                    bloque.appendChild(crearTabla(semana, datos.musicos[semana.descripcion] || [], rolesMusicos, anotaciones));
+                }
+
+                contenedor.appendChild(bloque);
+            });
+
+            if (contenedor.innerHTML === "") {
+                contenedor.innerHTML = `
+                <div class="mensaje">
+                    <div class="icono">📭</div>
+                    <p>No hay disponibilidades registradas para las semanas publicadas.</p>
+                </div>`;
+            }
+        }
+
+        function crearTabla(semana, reservas, listaRoles, anotaciones = {}) {
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('tabla-scroll');
+
+            let table = document.createElement('table');
+            let thead = document.createElement('thead');
+            let headerRow = document.createElement('tr');
+
+            let thRol = document.createElement('th');
+            thRol.textContent = "Rol";
+            headerRow.appendChild(thRol);
+
+            semana.fechas.forEach(fecha => {
+                let th = document.createElement('th');
+
+                if (fecha) {
+                    // Reemplazamos " " por saltos de línea en puntos estratégicos
+                    let textoFormateado = fecha
+                        .replace("DIA DE CONVENCION", "\nDIA DE CONVENCION")
+                        .replace("NO HAY CULTO", "\n(NO HAY CULTO");
+
+                    th.textContent = textoFormateado;
+                    th.classList.add('fecha-larga');
+
+                    // Si hay anotación para este día, mostrarla bajo la fecha
+                    if (anotaciones[fecha]) {
+                        const nota = document.createElement('div');
+                        nota.style.cssText = 'margin-top:5px; font-size:10px; font-weight:400; color:#ffd166; background:rgba(255,209,102,0.12); border-radius:4px; padding:2px 5px; line-height:1.4; white-space:normal;';
+                        nota.textContent = '📌 ' + anotaciones[fecha];
+                        th.appendChild(nota);
+                    }
+                } else {
+                    th.textContent = "";
+                }
+
+                headerRow.appendChild(th);
+            });
+
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            let tbody = document.createElement('tbody');
+            listaRoles.forEach(rol => {
+                let fila = document.createElement('tr');
+
+                let rolTd = document.createElement('td');
+                rolTd.textContent = rol;
+                fila.appendChild(rolTd);
+
+                semana.fechas.forEach(fecha => {
+                    let td = document.createElement('td');
+                    const coincidentes = reservas.filter(r => r.rol === rol && r.dia === fecha);
+
+                    if (coincidentes.length > 0) {
+                        td.classList.add('ocupado');
+                        coincidentes.forEach(r => {
+                            const span = document.createElement('span');
+                            span.textContent = r.nombre;
+                            span.style.cssText = 'display:block; font-size:11px; line-height:1.6;';
+                            td.appendChild(span);
+                        });
+                    }
+                    fila.appendChild(td);
+                });
+
+                tbody.appendChild(fila);
+            });
+
+            table.appendChild(tbody);
+            wrapper.appendChild(table);
+            return wrapper;
+        }
+
+        // Iniciar la aplicación
+        init();
+    </script>
+
+</body>
+
+</html>
